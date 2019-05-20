@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>grud node js</title>    
+    <link rel="stylesheet" href="/asset/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/asset/css/font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="/asset/css/angular-notify-flat.css" type="text/css" />
+    <link rel="stylesheet" href="/asset/css/signin.css" type="text/css" />    
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+    <script src="/asset/js/angular.min.js"></script>
+    <script src="/asset/js/ui-bootstrap-tpls-3.0.6.min.js"></script>     
+    <script src="/asset/js/angular-notify.js"></script>    
+    <script src="/asset/js/angular-ui-router.min.js"></script>           
+    <script src="/asset/js/angular-locale_es.js"></script>  
+    <script src="/asset/js/moment.js"></script>  
+</head>
+<body >  
+    
+    <div ui-view></div>    
+    <script type="text/ng-template" id="custom_template.html">
+        <div class="ui-notification custom-template">
+            <h3>{{nTitle}}</h3>
+            <div class="message" ng-bind-html="message"></div>
+            <div class="message">
+                <ul>
+                    <li ng-repeat="el in nElements">{{el}}</li>
+                </ul>
+            </div>
+            <div class="message">
+                <a class="btn btn-small btn-primary close-notification" ng-click="nClick()">Click me</a>
+            </div>
+        </div>
+    </script>
+</body>
+<script src="app.js"></script>
+<script src="utils/IndexConstante.js"></script>
+<script src="directives/IndexDirectives.js"></script>
+<script src="controllers/IndexController.js"></script>
+<script src="services/IndexServices.js"></script>
+</html>

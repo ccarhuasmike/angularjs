@@ -1,0 +1,64 @@
+<button ng-click='AgregarModalTask()' class="btn btn-success">Nuevo</button>
+<button ng-click='buscar()' class="btn btn-success">Buscar</button>
+<button ng-click='AgregarModalTask()' class="btn btn-primary">Cargar Excel</button>
+<button ng-click='AgregarModalTask()' class="btn btn-warning">Descargar Plantilla Excel</button>
+</br>
+</br>
+<form class="form-horizontal">
+    <div class="form-group row">
+        <label class="control-label col-md-2">
+            Title :
+        </label>
+        <div class="col-md-4">
+            <input type="text" class="form-control">
+        </div>
+        <label class="control-label col-md-2">
+            Descripcion:
+        </label>
+        <div class="col-md-4">
+            <input type="text" class="form-control">
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <table class="table table-bordered">
+            <thead>
+                <tr>                    
+                    <th scope="col">Title</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Comentario</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <div  ng-if="pagination.showpagination">
+                <tbody ng-repeat="item in listado">
+                    <tr>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.descripcion }}</td>
+                        <td>{{ item.marca }}</td>
+                        <td>{{ item.modelo }}</td>
+                        <td>{{ item.comentario }}</td>
+                        <td>{{ item.fecha }}</td>
+                        <td>
+                            <button ng-click='ObtenerTaskPorId(item)' class="btn btn-info">Editar</button>
+                            <button ng-click='ModalEliminarTask(item._id)' class="btn btn-danger">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </div>
+            <tbody>
+                <tr ng-if="!pagination.showpagination">
+                    <td colspan="4">No se encontraron registros...</td>
+                </tr>
+            </tbody>
+        </table>
+        <ul ng-show="pagination.showpagination" uib-pagination boundary-links="true"
+            items-per-page="pagination.itemsPerPage" total-items="pagination.totalItems"
+            ng-change="pageChanged(pagination)" ng-model="pagination.currentPage" class="pagination-sm"
+            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+        </ul>
+    </div>
+</form>

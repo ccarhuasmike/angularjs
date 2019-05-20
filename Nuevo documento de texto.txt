@@ -1,0 +1,1 @@
+https://carlosazaustre.es/uso-de-promesas-en-angularjs/
