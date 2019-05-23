@@ -10,8 +10,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.post('/api/authenticate', function (req, res) {
-    debugger;
+router.post('/api/authenticate', function (req, res) {    
     User.findOne({ email: req.body.email, password: req.body.password }, function (err, user) {
         if (err) {
             res.json({
@@ -19,6 +18,7 @@ router.post('/api/authenticate', function (req, res) {
                 data: "Error occured: " + err
             });
         } else {
+                      
             if (user) {
                 res.json({
                     type: true,
@@ -36,24 +36,27 @@ router.post('/api/authenticate', function (req, res) {
 });
 
 router.post('/api/signin', function (req, res) {
+    
     User.findOne({ email: req.body.email, password: req.body.password }, function (err, user) {
         if (err) {
             res.json({
                 type: false,
                 data: "Error occured: " + err
             });
-        } else {
+        } else {    
             if (user) {
                 res.json({
                     type: false,
                     data: "User already exists!"
                 });
             } else {
+                
                 var userModel = new User();
                 userModel.email = req.body.email;
                 userModel.password = req.body.password;
                 userModel.save(function (err, user) {
-                    user.token = jwt.sign(user, process.env.JWT_SECRET);
+                
+                    user.token = jwt.sign(user, "abcd1234");
                     user.save(function (err, user1) {
                         res.json({
                             type: true,

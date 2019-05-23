@@ -270,17 +270,31 @@ app.controller('LoginController', function ($rootScope, $scope, $location, $loca
             email: $scope.email,
             password: $scope.password
         }
-        debugger;
-        Main.signin(formData, function (res) {
-            if (res.type == false) {
-                alert(res.data)
-            } else {
-                $localStorage.token = res.data.token;
-                window.location = "/";
-            }
-        }, function () {
-            $rootScope.error = 'Failed to signin';
-        })
+
+        Main.signin(formData)
+            .then(response => {
+                debugger;
+                if (response.type == false) {
+                    alert(response.data)
+                } else {
+                    $localStorage.token = response.data.token;
+                    window.location = "/";
+                }
+            }, function (error) {
+                Notification.error({ message: '<b>Error</b> <s>Al guardar los datos de la persona</s>', title: '<i>Error</i> <u>Mant Persona</u>' });
+            });
+
+        // Main.signin(formData, function (res) {
+        //     debugger;
+        //     if (res.type == false) {
+        //         alert(res.data)
+        //     } else {
+        //         $localStorage.token = res.data.token;
+        //         window.location = "/";
+        //     }
+        // }, function () {
+        //     $rootScope.error = 'Failed to signin';
+        // })
     };
 
     $scope.signup = function () {

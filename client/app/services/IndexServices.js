@@ -132,7 +132,7 @@ App.factory('TaskService', ['$http', '$q', '$log', function ($http, $q, $log) {
     };
 }]);
 App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStorage, $q) {
-    debugger;
+    
     var baseUrl = "/api";
     function changeUser(user) {
         angular.extend(currentUser, user);
@@ -179,7 +179,8 @@ App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStora
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(function (response) {
+            }).then(function (response) {    
+                debugger;            
                 d.resolve(response.data);
             }, function (error) {
                 d.reject(error);
