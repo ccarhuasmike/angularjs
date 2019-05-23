@@ -17,6 +17,8 @@ const taskSchema = new Schema({
     // }
 });
 
+
+
 const Parametros = new Schema({
     descripcion : String,
     estado:Number,
@@ -28,12 +30,20 @@ const Parametros = new Schema({
     }]    
 });
 
+const UserSchema   = new Schema({
+    email: String,
+    password: String,
+    token: String
+});
+
 const parametos = mongoose.model('parametros', Parametros);
 const task = mongoose.model('task', taskSchema);
+const user = mongoose.model('users', UserSchema);
 
 module.exports = {
     Task:task,
     Parametros:parametos,
+    User:user,
 };
 
 

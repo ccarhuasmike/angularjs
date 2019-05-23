@@ -21,7 +21,7 @@ app.controller('HomeController', function (
     // Notification.error({message: 'Error notification (no timeout)', delay: null});
     // Notification.success({message: 'Success notification 20s', delay: 20000});
     // Notification.error({ message: '<b>Error</b> <s>notification</s>', title: '<i>Html</i> <u>message</u>' });
-
+    //https://github.com/huseyinbabal/token-based-auth-frontend
 
     $scope.valueFromService = HomeService.helloWorld("User");
     //Paginacion-Inicio        
@@ -214,7 +214,7 @@ app.controller('HomeController', function (
             }
         });
     }
-   
+
     $scope.AgregarTask = function (eTask) {
         TaskService.AgregarTask(eTask, $scope.pagination)
             .then(response => {
@@ -263,16 +263,71 @@ app.controller('HomeController', function (
         });
     }
 });
-app.controller('LoginController', function (){        
+app.controller('LoginController', function ($rootScope, $scope, $location, $localStorage, Main) {
+
+    $scope.signin = function () {
+        var formData = {
+            email: $scope.email,
+            password: $scope.password
+        }
+        debugger;
+        Main.signin(formData, function (res) {
+            if (res.type == false) {
+                alert(res.data)
+            } else {
+                $localStorage.token = res.data.token;
+                window.location = "/";
+            }
+        }, function () {
+            $rootScope.error = 'Failed to signin';
+        })
+    };
+
+    $scope.signup = function () {
+        var formData = {
+            email: $scope.email,
+            password: $scope.password
+        }
+
+        Main.save(formData, function (res) {
+            if (res.type == false) {
+                alert(res.data)
+            } else {
+                $localStorage.token = res.data.token;
+                window.location = "/"
+            }
+        }, function () {
+            $rootScope.error = 'Failed to signup';
+        })
+    };
+
+    $scope.me = function () {
+        Main.me(function (res) {
+            $scope.myDetails = res;
+        }, function () {
+            $rootScope.error = 'Failed to fetch details';
+        })
+    };
+
+    $scope.logout = function () {
+        Main.logout(function () {
+            window.location = "/"
+        }, function () {
+            alert("Failed to logout!");
+        });
+    };
+    $scope.token = $localStorage.token;
+
+
 });
-app.controller('ContactController', function (){    
+app.controller('ContactController', function () {
     alert("ContactController");
 });
-app.controller('navbarController', function ($state){   
+app.controller('navbarController', function ($state) {
     $state.go("root.contact");
     alert("navbarController");
 });
-app.controller('footerController', function (){    
+app.controller('footerController', function () {
     alert("footerController");
 });
 
