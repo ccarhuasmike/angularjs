@@ -263,7 +263,7 @@ app.controller('HomeController', function (
         });
     }
 });
-app.controller('LoginController', function ($rootScope, $scope, $location, $localStorage, Main) {
+app.controller('LoginController', function ($state,$rootScope, $scope, $location, $localStorage, Main) {
 
     $scope.signin = function () {
         var formData = {
@@ -278,7 +278,7 @@ app.controller('LoginController', function ($rootScope, $scope, $location, $loca
                     alert(response.data)
                 } else {
                     $localStorage.token = response.data.token;
-                    window.location = "/";
+                    $state.go("root.home");                    
                 }
             }, function (error) {
                 Notification.error({ message: '<b>Error</b> <s>Al guardar los datos de la persona</s>', title: '<i>Error</i> <u>Mant Persona</u>' });
@@ -335,13 +335,23 @@ app.controller('LoginController', function ($rootScope, $scope, $location, $loca
 
 });
 app.controller('ContactController', function () {
-    alert("ContactController");
+    //alert("ContactController");
 });
-app.controller('navbarController', function ($state) {
-    $state.go("root.contact");
-    alert("navbarController");
+app.controller('navbarController', function ($state,Main,$scope) {
+    //$state.go("root.contact");
+    //alert("navbarController");
+
+    $scope.logout = function() {
+        Main.logout(function() {
+            debugger;            
+            $state.go("login");
+        }, function() {
+            alert("Failed to logout!");
+        });
+    };
+
 });
 app.controller('footerController', function () {
-    alert("footerController");
+    //alert("footerController");
 });
 

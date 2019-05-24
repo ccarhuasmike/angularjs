@@ -192,6 +192,7 @@ App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStora
             $http.get(baseUrl + '/me').success(success).error(error)
         },
         logout: function (success) {
+            debugger;
             changeUser({});
             delete $localStorage.token;
             success();
