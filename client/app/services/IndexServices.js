@@ -40,8 +40,21 @@ App.factory('TaskService', ['$http', '$q', '$log', function ($http, $q, $log) {
         }
         return p.join('&');
     };
-
     return {
+        me: function () {
+            
+            var d = $q.defer();
+            $http({
+                method: 'get',
+                url: '/api/me'                
+            }).then(function (response) {                
+                d.resolve(response.data);
+            }, function (error) {                
+                d.reject(error);
+            });
+            return d.promise;
+            //$http.get(baseUrl + '/me').success(success).error(error)
+        },
         ListarTask: function (pagination) {
             var d = $q.defer();
             $http({
@@ -131,8 +144,8 @@ App.factory('TaskService', ['$http', '$q', '$log', function ($http, $q, $log) {
         }
     };
 }]);
-App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStorage, $q) {
-    
+App.factory('Main', ['$http', '$localStorage', '$q', function ($http, $localStorage, $q) {
+
     var baseUrl = "/api";
     function changeUser(user) {
         angular.extend(currentUser, user);
@@ -166,11 +179,29 @@ App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStora
     }
 
     var currentUser = getUserFromToken();
+
     return {
-        save: function (data, success, error) {
-            $http.post(baseUrl + '/signin', data).success(success).error(error)
+        signin: function (data, success, error) {
+
+            var d = $q.defer();
+            $http({
+                method: 'POST',
+                url: baseUrl + '/signin',
+                data: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (response) {       
+                    
+                d.resolve(response.data);
+            }, function (error) {
+                d.reject(error);
+            });
+            return d.promise;
+
+            //$http.post(baseUrl + '/', data).success(success).error(error)
         },
-        signin: function (data, success, error) {            
+        authenticate: function (data, success, error) {
             var d = $q.defer();
             $http({
                 method: 'POST',
@@ -179,20 +210,14 @@ App.factory('Main', ['$http', '$localStorage','$q', function ($http, $localStora
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(function (response) {    
-                debugger;            
+            }).then(function (response) {                
                 d.resolve(response.data);
             }, function (error) {
                 d.reject(error);
             });
             return d.promise;
-            //$http.post(baseUrl + '/authenticate', data).success(success).error(error)
-        },
-        me: function (success, error) {
-            $http.get(baseUrl + '/me').success(success).error(error)
-        },
-        logout: function (success) {
-            debugger;
+        },      
+        logout: function (success) {            
             changeUser({});
             delete $localStorage.token;
             success();
