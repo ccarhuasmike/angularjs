@@ -11,57 +11,57 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/api/authenticate', function (req, res) {
-    User.findOne({
-        email: req.body.email
-    }, function (err, user) {
-        if (err) throw err;
+    // User.findOne({
+    //     email: req.body.email
+    // }, function (err, user) {
+    //     if (err) throw err;
 
-        if (!user) {
-            res.status(401).send({ success: false, msg: 'Authentication failed. User not found.' });
-        } else {
-            //check if password matches
-
-            user.comparePassword(req.body.password, function (err, isMatch) {
-
-                if (isMatch && !err) {
-                    // if user is found and password is right create a token
-                    var token = jwt.sign(user.toJSON(), "secreto", {
-                        expiresIn: '1m' // 1 week
-                    });
-                    // return the information including token as JSON
-                    res.json({
-                        type: true,
-                        data: user,
-                        token: 'JWT ' + token
-                    });
-                    //res.json({ success: true, token: 'JWT ' + token });
-                } else {
-                    res.status(401).send({ success: false, msg: 'Authentication failed. Wrong password.' });
-                }
-            });
-        }
-    });
-    // User.findOne({ email: req.body.email, password: req.body.password }, function (err, user) {
-    //     if (err) {
-    //         res.json({
-    //             type: false,
-    //             data: "Error occured: " + err
-    //         });
+    //     if (!user) {
+    //         res.status(401).send({ success: false, msg: 'Authentication failed. User not found.' });
     //     } else {
-    //         if (user) {
-    //             res.json({
-    //                 type: true,
-    //                 data: user,
-    //                 token: user.token
-    //             });
-    //         } else {
-    //             res.json({
-    //                 type: false,
-    //                 data: "Incorrect email/password"
-    //             });
-    //         }
+    //         //check if password matches
+
+    //         user.comparePassword(req.body.password, function (err, isMatch) {
+
+    //             if (isMatch && !err) {
+    //                 // if user is found and password is right create a token
+    //                 var token = jwt.sign(user.toJSON(), "secreto", {
+    //                     expiresIn: '1m' // 1 week
+    //                 });
+    //                 // return the information including token as JSON
+    //                 res.json({
+    //                     type: true,
+    //                     data: user,
+    //                     token: 'JWT ' + token
+    //                 });
+    //                 //res.json({ success: true, token: 'JWT ' + token });
+    //             } else {
+    //                 res.status(401).send({ success: false, msg: 'Authentication failed. Wrong password.' });
+    //             }
+    //         });
     //     }
     // });
+    User.findOne({ email: req.body.email, password: req.body.password }, function (err, user) {
+        if (err) {
+            res.json({
+                type: false,
+                data: "Error occured: " + err
+            });
+        } else {
+            if (user) {
+                res.json({
+                    type: true,
+                    data: user,
+                    token: user.token
+                });
+            } else {
+                res.json({
+                    type: false,
+                    data: "Incorrect email/password"
+                });
+            }
+        }
+    });
 });
 
 router.post('/api/signin', function (req, res) {
@@ -99,8 +99,7 @@ router.post('/api/signin', function (req, res) {
     });
 });
 
-router.get('/api/me', passport.authenticate('jwt', { session: false }), function (req, res) {
-
+router.get('/api/me', ensureAuthorized, function (req, res) {
     var token = getToken(req.headers);
     if (token) {
         User.findOne({ token: req.token }, function (err, user) {
@@ -147,11 +146,11 @@ getToken = function (headers) {
     }
 };
 //Api Rest
-router.get('/api/getParametros', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/api/getParametros', ensureAuthorized, async (req, res) => {
     const parametros = await Parametros.find({ descripcion: req.query.descripcion })
     res.json(parametros);
 });
-router.get('/api/getdatos', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/api/getdatos', ensureAuthorized, async (req, res) => {
     // const parametros = new Parametros();
     // parametros.descripcion = "Marca";
     // parametros.estado = 1;
@@ -175,7 +174,7 @@ router.get('/api/getdatos', passport.authenticate('jwt', { session: false }), as
     // ]
     // await parametros.save();
     var token = getToken(req.headers);
-    debugger;
+    
     if (token) {
         var pagination = JSON.parse(req.query.pagination);
         ListarTask(pagination).then(function (result) {
@@ -216,7 +215,7 @@ ListarTask = function (req) {
     return promise;
 };
 
-router.get('/api/getdatosPorId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/api/getdatosPorId', ensureAuthorized, async (req, res) => {
     const task = await Task.findOne({ _id: req.query.Id });
     const ListParametros = await Parametros.find({ 'descripcion': "Marca" });
     const result = {
@@ -226,7 +225,7 @@ router.get('/api/getdatosPorId', passport.authenticate('jwt', { session: false }
     res.json(result);
 });
 
-router.post('/api/editar', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/api/editar', ensureAuthorized, async (req, res) => {
     var response = {}
     await Task.findByIdAndUpdate({
         _id: req.body.datos._id
@@ -242,14 +241,14 @@ router.post('/api/editar', passport.authenticate('jwt', { session: false }), asy
     });
 });
 
-router.post('/api/add', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/api/add', ensureAuthorized, async (req, res) => {
     const task = new Task(req.body.datos);
     await task.save();
     ListarTask(req.body.pagination).then(function (result) {
         res.json(result);
     });
 });
-router.post('/api/delete', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/api/delete', ensureAuthorized, async (req, res) => {
     await Task.remove({ _id: req.body.Id });
     ListarTask(req.body.pagination).then(function (result) {
         res.json(result);

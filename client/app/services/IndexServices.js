@@ -53,7 +53,7 @@ App.factory('TaskService', ['$http', '$q', '$log', function ($http, $q, $log) {
                 d.reject(error);
             });
             return d.promise;
-            //$http.get(baseUrl + '/me').success(success).error(error)
+            //$http.get(baseUrl + '/me').success(success).error(error)//
         },
         ListarTask: function (pagination) {
             var d = $q.defer();

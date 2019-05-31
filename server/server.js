@@ -18,16 +18,16 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname.replace("server", "client"), 'app')));
 //middlewares
 app.use(morgan('dev'));
-app.use(passport.initialize());
+// app.use(passport.initialize());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.use(function (req, res, next) {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  next();
+});
 
 //importing routes
 const index_routes = require('./routes');
