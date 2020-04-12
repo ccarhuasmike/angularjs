@@ -38,9 +38,7 @@ app.controller('HomeController', function (
         getInit(pagination);
     };
     //Fin-Inicio
-
     getInit($scope.pagination);
-
     function getInit(pagination) {
         TaskService.ListarTask(pagination)
             .then(function (response) {
@@ -55,7 +53,6 @@ app.controller('HomeController', function (
                 Notification.error({ message: '<b>Error</b> <s>"' + error + '"</s>', title: '<i>Html</i> <u>message</u>' });
             });
     }
-
     $scope.me = function () {
         
         TaskService.me().then(response => {
@@ -70,7 +67,6 @@ app.controller('HomeController', function (
         // })
     };
     $scope.BuscarTask = function () {
-
     }
     $scope.ObtenerTaskPorId = function (eTask) {
         var modal = $uibModal.open({
@@ -142,7 +138,6 @@ app.controller('HomeController', function (
             }
         });
     }
-
     function getObjectTask(flag, $scope) {
         //flag => false: Registrar
         //flag => true  : actualizar
@@ -170,7 +165,6 @@ app.controller('HomeController', function (
                 Notification.error({ message: '<b>Error</b> <s>Al actualizar los datos de la persona</s>', title: '<i>Error</i> <u>Mant Persona</u>' });
             });
     }
-
     $scope.AgregarModalTask = function () {
         var modal = $uibModal.open({
             templateUrl: 'views/home/modalAgregarTask.htm',
@@ -231,7 +225,6 @@ app.controller('HomeController', function (
             }
         });
     }
-
     $scope.AgregarTask = function (eTask) {
         TaskService.AgregarTask(eTask, $scope.pagination)
             .then(response => {
@@ -242,7 +235,6 @@ app.controller('HomeController', function (
                 Notification.error({ message: '<b>Error</b> <s>Al guardar los datos de la persona</s>', title: '<i>Error</i> <u>Mant Persona</u>' });
             });
     }
-
     $scope.EliminarTask = function (Id) {
         TaskService.EliminarTask(Id, $scope.pagination)
             .then(response => {
@@ -253,7 +245,6 @@ app.controller('HomeController', function (
                 Notification.error({ message: '<b>Error</b> <s>Al eliminar los datos de la persona</s>', title: '<i>Error</i> <u>Mant Persona</u>' });
             });
     }
-
     $scope.ModalEliminarTask = function (id) {
         var modal = $uibModal.open({
             templateUrl: 'views/home/modalEliminarTask.htm',
@@ -285,6 +276,7 @@ app.controller('LoginController', function ($state, $rootScope, $scope, $locatio
     $scope.objetoSingin={};
     $scope.objetoLogin={};
     $scope.authenticates = function () {
+        debugger;
         var formData = {
             email: $scope.objetoLogin.email,
             password: $scope.objetoLogin.password
@@ -325,6 +317,7 @@ app.controller('LoginController', function ($state, $rootScope, $scope, $locatio
     }
     
     $scope.signin = function () {
+        debugger;
         var formData = {
             email: $scope.objetoSingin.email,
             password: $scope.objetoSingin.password

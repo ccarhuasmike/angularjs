@@ -198,8 +198,6 @@ App.factory('Main', ['$http', '$localStorage', '$q', function ($http, $localStor
                 d.reject(error);
             });
             return d.promise;
-
-            //$http.post(baseUrl + '/', data).success(success).error(error)
         },
         authenticate: function (data, success, error) {
             var d = $q.defer();

@@ -8,8 +8,7 @@ var JwtStrategy = require('passport-jwt').Strategy,
 const User = require('../models/task').User;
 
 module.exports = function(passport) {
-  var opts = {};
-  
+  var opts = {};  
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
   opts.secretOrKey = "secreto";
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
